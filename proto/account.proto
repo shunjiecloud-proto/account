@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+option go_package = "github.com/shunjiecloud-proto/account/proto";
+
+service Account {
+    //  创建用户
+    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {}
+    //  获取用户信息
+    rpc UserInfo(UserInfoRequest) returns (UserInfoResponse) {}
+    //  检查用户是否可以被注册
+    rpc RegistrationCheck(RegistrationCheckRequest) returns (RegistrationCheckResponse) {}
+    //  登陆
+    rpc Login(LoginRequest) returns (LoginResponse) {}
+    //  登出
+    rpc Logout(LogoutRequest) returns (LogoutResponse) {}
+}
+
+//  创建用户
+message CreateUserRequest{
+    string name = 1;     
+    string password = 2;
+    string mail =3;
+    string phone = 4;
+    string avatar = 5;
+    int32  gender = 6;
+}
+
+message CreateUserResponse{
+    int64 userId = 1;
+    string name = 2; 
+    string mail =3;
+    string phone = 4;
+    string avatar = 5;
+    int32  gender =6;  
+}
+
+//  获取用户信息
+message UserInfoRequest{}
+
+message UserInfoResponse{
+    int64 userId = 1;
+    string name = 2; 
+    string mail =3;
+    string phone = 4;
+    string avatar = 5;
+    int32  gender =6;  
+}
+
+//  检查用户是否可以被注册
+message RegistrationCheckRequest{
+    string name = 2; 
+    string mail =3;
+}
+
+message RegistrationCheckResponse{
+   bool isOk = 1;
+   string errMsg = 2;
+}
+
+//  登陆
+message LoginRequest{
+    string LoginUserId = 1; //可使用用户名、邮箱、手机
+}
+
+message LoginResponse{
+    int64 userId = 1;
+    string name = 2; 
+    string mail =3;
+    string phone = 4;
+    string avatar = 5;
+    int32  gender =6;  
+}
+
+//  登出
+message LogoutRequest{
+    int64 userId = 1; //可使用用户名、邮箱、手机
+}
+
+message LogoutResponse{
+    bool isOk = 1;
+    string errMsg = 2;
+ }
