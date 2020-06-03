@@ -48,10 +48,8 @@ type AccountService interface {
 	UserInfo(ctx context.Context, in *UserInfoRequest, opts ...client.CallOption) (*UserInfoResponse, error)
 	//  检查用户是否可以被注册
 	RegistrationCheck(ctx context.Context, in *RegistrationCheckRequest, opts ...client.CallOption) (*RegistrationCheckResponse, error)
-	//  登陆
-	Login(ctx context.Context, in *LoginRequest, opts ...client.CallOption) (*LoginResponse, error)
-	//  登出
-	Logout(ctx context.Context, in *LogoutRequest, opts ...client.CallOption) (*LogoutResponse, error)
+	//  检查用户密码
+	UserPasswordCheck(ctx context.Context, in *UserPasswordCheckRequest, opts ...client.CallOption) (*UserPasswordCheckResponse, error)
 }
 
 type accountService struct {
@@ -96,19 +94,9 @@ func (c *accountService) RegistrationCheck(ctx context.Context, in *Registration
 	return out, nil
 }
 
-func (c *accountService) Login(ctx context.Context, in *LoginRequest, opts ...client.CallOption) (*LoginResponse, error) {
-	req := c.c.NewRequest(c.name, "Account.Login", in)
-	out := new(LoginResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *accountService) Logout(ctx context.Context, in *LogoutRequest, opts ...client.CallOption) (*LogoutResponse, error) {
-	req := c.c.NewRequest(c.name, "Account.Logout", in)
-	out := new(LogoutResponse)
+func (c *accountService) UserPasswordCheck(ctx context.Context, in *UserPasswordCheckRequest, opts ...client.CallOption) (*UserPasswordCheckResponse, error) {
+	req := c.c.NewRequest(c.name, "Account.UserPasswordCheck", in)
+	out := new(UserPasswordCheckResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -125,10 +113,8 @@ type AccountHandler interface {
 	UserInfo(context.Context, *UserInfoRequest, *UserInfoResponse) error
 	//  检查用户是否可以被注册
 	RegistrationCheck(context.Context, *RegistrationCheckRequest, *RegistrationCheckResponse) error
-	//  登陆
-	Login(context.Context, *LoginRequest, *LoginResponse) error
-	//  登出
-	Logout(context.Context, *LogoutRequest, *LogoutResponse) error
+	//  检查用户密码
+	UserPasswordCheck(context.Context, *UserPasswordCheckRequest, *UserPasswordCheckResponse) error
 }
 
 func RegisterAccountHandler(s server.Server, hdlr AccountHandler, opts ...server.HandlerOption) error {
@@ -136,8 +122,7 @@ func RegisterAccountHandler(s server.Server, hdlr AccountHandler, opts ...server
 		CreateUser(ctx context.Context, in *CreateUserRequest, out *CreateUserResponse) error
 		UserInfo(ctx context.Context, in *UserInfoRequest, out *UserInfoResponse) error
 		RegistrationCheck(ctx context.Context, in *RegistrationCheckRequest, out *RegistrationCheckResponse) error
-		Login(ctx context.Context, in *LoginRequest, out *LoginResponse) error
-		Logout(ctx context.Context, in *LogoutRequest, out *LogoutResponse) error
+		UserPasswordCheck(ctx context.Context, in *UserPasswordCheckRequest, out *UserPasswordCheckResponse) error
 	}
 	type Account struct {
 		account
@@ -162,10 +147,6 @@ func (h *accountHandler) RegistrationCheck(ctx context.Context, in *Registration
 	return h.AccountHandler.RegistrationCheck(ctx, in, out)
 }
 
-func (h *accountHandler) Login(ctx context.Context, in *LoginRequest, out *LoginResponse) error {
-	return h.AccountHandler.Login(ctx, in, out)
-}
-
-func (h *accountHandler) Logout(ctx context.Context, in *LogoutRequest, out *LogoutResponse) error {
-	return h.AccountHandler.Logout(ctx, in, out)
+func (h *accountHandler) UserPasswordCheck(ctx context.Context, in *UserPasswordCheckRequest, out *UserPasswordCheckResponse) error {
+	return h.AccountHandler.UserPasswordCheck(ctx, in, out)
 }

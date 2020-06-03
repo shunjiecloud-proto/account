@@ -9,10 +9,8 @@ service Account {
     rpc UserInfo(UserInfoRequest) returns (UserInfoResponse) {}
     //  检查用户是否可以被注册
     rpc RegistrationCheck(RegistrationCheckRequest) returns (RegistrationCheckResponse) {}
-    //  登陆
-    rpc Login(LoginRequest) returns (LoginResponse) {}
-    //  登出
-    rpc Logout(LogoutRequest) returns (LogoutResponse) {}
+    //  检查用户密码
+    rpc UserPasswordCheck(UserPasswordCheckRequest) returns (UserPasswordCheckResponse) {}
 }
 
 //  创建用户
@@ -34,7 +32,7 @@ message CreateUserResponse{
     int32  gender =6;  
 }
 
-//  获取用户信息
+//  获取用户信息，填一项即可
 message UserInfoRequest{
     int64 userId  = 1;
     string name = 2;
@@ -63,26 +61,13 @@ message RegistrationCheckResponse{
    string errMsg = 2;
 }
 
-//  登陆
-message LoginRequest{
-    string LoginUserId = 1; //可使用用户名、邮箱、手机
+//  检查用户密码
+message UserPasswordCheckRequest{
+    string account = 1; //  用户名、邮箱、手机均可
+    string password = 2; 
 }
 
-message LoginResponse{
-    int64 userId = 1;
-    string name = 2; 
-    string mail =3;
-    string phone = 4;
-    string avatar = 5;
-    int32  gender =6;  
-}
-
-//  登出
-message LogoutRequest{
-    int64 userId = 1; //可使用用户名、邮箱、手机
-}
-
-message LogoutResponse{
+message UserPasswordCheckResponse{
     bool isOk = 1;
     string errMsg = 2;
- }
+}
