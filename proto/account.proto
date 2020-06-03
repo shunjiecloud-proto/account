@@ -52,8 +52,9 @@ message UserInfoResponse{
 
 //  检查用户是否可以被注册
 message RegistrationCheckRequest{
-    string name = 2; 
-    string mail =3;
+    string name = 1; 
+    string mail = 2;
+    string phone = 3;
 }
 
 message RegistrationCheckResponse{
