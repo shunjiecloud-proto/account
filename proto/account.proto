@@ -35,7 +35,11 @@ message CreateUserResponse{
 }
 
 //  获取用户信息
-message UserInfoRequest{}
+message UserInfoRequest{
+    int64 userId  = 1;
+    string name = 2;
+    string mail = 3;
+}
 
 message UserInfoResponse{
     int64 userId = 1;
