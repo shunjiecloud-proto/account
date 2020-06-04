@@ -57,8 +57,6 @@ message RegistrationCheckRequest{
 }
 
 message RegistrationCheckResponse{
-   bool isOk = 1;
-   string errMsg = 2;
 }
 
 //  检查用户密码
@@ -68,6 +66,4 @@ message UserPasswordCheckRequest{
 }
 
 message UserPasswordCheckResponse{
-    bool isOk = 1;
-    string errMsg = 2;
 }
