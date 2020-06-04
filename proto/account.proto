@@ -19,8 +19,7 @@ message CreateUserRequest{
     string password = 2;
     string mail =3;
     string phone = 4;
-    string avatar = 5;
-    int32  gender = 6;
+    int32  gender = 5;
 }
 
 message CreateUserResponse{
@@ -28,8 +27,8 @@ message CreateUserResponse{
     string name = 2; 
     string mail =3;
     string phone = 4;
-    string avatar = 5;
-    int32  gender =6;  
+    int32  gender =5;  
+    string avatar = 6;
 }
 
 //  获取用户信息，填一项即可
@@ -45,8 +44,8 @@ message UserInfoResponse{
     string name = 2; 
     string mail =3;
     string phone = 4;
-    string avatar = 5;
-    int32  gender =6;  
+    int32  gender =5;  
+    string avatar = 6;
 }
 
 //  检查用户是否可以被注册
