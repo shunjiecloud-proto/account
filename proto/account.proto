@@ -23,7 +23,7 @@ message CreateUserRequest{
 }
 
 message CreateUserResponse{
-    int64 userId = 1;
+    int64 user_id = 1;
     string name = 2; 
     string mail =3;
     string phone = 4;
@@ -33,14 +33,14 @@ message CreateUserResponse{
 
 //  获取用户信息，填一项即可
 message UserInfoRequest{
-    int64 userId  = 1;
+    int64 user_id  = 1;
     string name = 2;
     string mail = 3;
     string phone = 4;
 }
 
 message UserInfoResponse{
-    int64 userId = 1;
+    int64 user_id = 1;
     string name = 2; 
     string mail =3;
     string phone = 4;
