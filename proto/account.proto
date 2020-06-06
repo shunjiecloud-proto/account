@@ -3,7 +3,9 @@ syntax = "proto3";
 option go_package = "github.com/shunjiecloud-proto/account/proto";
 
 service Account {
-    //  创建用户
+    //  用户注册
+    rpc SignUp(SignUpRequest) returns (SignUpResponse) {}
+    //  创建用户(后台使用)
     rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {}
     //  获取用户信息
     rpc UserInfo(UserInfoRequest) returns (UserInfoResponse) {}
@@ -13,10 +15,28 @@ service Account {
     rpc UserPasswordCheck(UserPasswordCheckRequest) returns (UserPasswordCheckResponse) {}
 }
 
-//  创建用户
+//  用户注册
+message SignUpRequest{
+    string name = 1;     
+    string password = 2; // 原始密码sha1后，使用公钥加密，再stdbase64。
+    string mail =3;
+    string phone = 4;
+    int32  gender = 5;
+}
+
+message SignUpResponse{
+    int64 user_id = 1;
+    string name = 2; 
+    string mail =3;
+    string phone = 4;
+    int32  gender =5;  
+    string avatar = 6;
+}
+
+//  创建用户(后台使用)
 message CreateUserRequest{
     string name = 1;     
-    string password = 2;
+    string password = 2;   // 原密码sha1
     string mail =3;
     string phone = 4;
     int32  gender = 5;

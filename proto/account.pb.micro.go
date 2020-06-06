@@ -42,7 +42,9 @@ func NewAccountEndpoints() []*api.Endpoint {
 // Client API for Account service
 
 type AccountService interface {
-	//  创建用户
+	//  用户注册
+	SignUp(ctx context.Context, in *SignUpRequest, opts ...client.CallOption) (*SignUpResponse, error)
+	//  创建用户(后台使用)
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...client.CallOption) (*CreateUserResponse, error)
 	//  获取用户信息
 	UserInfo(ctx context.Context, in *UserInfoRequest, opts ...client.CallOption) (*UserInfoResponse, error)
@@ -62,6 +64,16 @@ func NewAccountService(name string, c client.Client) AccountService {
 		c:    c,
 		name: name,
 	}
+}
+
+func (c *accountService) SignUp(ctx context.Context, in *SignUpRequest, opts ...client.CallOption) (*SignUpResponse, error) {
+	req := c.c.NewRequest(c.name, "Account.SignUp", in)
+	out := new(SignUpResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *accountService) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...client.CallOption) (*CreateUserResponse, error) {
@@ -107,7 +119,9 @@ func (c *accountService) UserPasswordCheck(ctx context.Context, in *UserPassword
 // Server API for Account service
 
 type AccountHandler interface {
-	//  创建用户
+	//  用户注册
+	SignUp(context.Context, *SignUpRequest, *SignUpResponse) error
+	//  创建用户(后台使用)
 	CreateUser(context.Context, *CreateUserRequest, *CreateUserResponse) error
 	//  获取用户信息
 	UserInfo(context.Context, *UserInfoRequest, *UserInfoResponse) error
@@ -119,6 +133,7 @@ type AccountHandler interface {
 
 func RegisterAccountHandler(s server.Server, hdlr AccountHandler, opts ...server.HandlerOption) error {
 	type account interface {
+		SignUp(ctx context.Context, in *SignUpRequest, out *SignUpResponse) error
 		CreateUser(ctx context.Context, in *CreateUserRequest, out *CreateUserResponse) error
 		UserInfo(ctx context.Context, in *UserInfoRequest, out *UserInfoResponse) error
 		RegistrationCheck(ctx context.Context, in *RegistrationCheckRequest, out *RegistrationCheckResponse) error
@@ -133,6 +148,10 @@ func RegisterAccountHandler(s server.Server, hdlr AccountHandler, opts ...server
 
 type accountHandler struct {
 	AccountHandler
+}
+
+func (h *accountHandler) SignUp(ctx context.Context, in *SignUpRequest, out *SignUpResponse) error {
+	return h.AccountHandler.SignUp(ctx, in, out)
 }
 
 func (h *accountHandler) CreateUser(ctx context.Context, in *CreateUserRequest, out *CreateUserResponse) error {
