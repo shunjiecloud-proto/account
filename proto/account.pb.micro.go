@@ -44,6 +44,8 @@ func NewAccountEndpoints() []*api.Endpoint {
 type AccountService interface {
 	//  用户注册
 	SignUp(ctx context.Context, in *SignUpRequest, opts ...client.CallOption) (*SignUpResponse, error)
+	//  用户登录
+	SignIn(ctx context.Context, in *SignInRequest, opts ...client.CallOption) (*SignInResponse, error)
 	//  创建用户(后台使用)
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...client.CallOption) (*CreateUserResponse, error)
 	//  获取用户信息
@@ -69,6 +71,16 @@ func NewAccountService(name string, c client.Client) AccountService {
 func (c *accountService) SignUp(ctx context.Context, in *SignUpRequest, opts ...client.CallOption) (*SignUpResponse, error) {
 	req := c.c.NewRequest(c.name, "Account.SignUp", in)
 	out := new(SignUpResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accountService) SignIn(ctx context.Context, in *SignInRequest, opts ...client.CallOption) (*SignInResponse, error) {
+	req := c.c.NewRequest(c.name, "Account.SignIn", in)
+	out := new(SignInResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -121,6 +133,8 @@ func (c *accountService) UserPasswordCheck(ctx context.Context, in *UserPassword
 type AccountHandler interface {
 	//  用户注册
 	SignUp(context.Context, *SignUpRequest, *SignUpResponse) error
+	//  用户登录
+	SignIn(context.Context, *SignInRequest, *SignInResponse) error
 	//  创建用户(后台使用)
 	CreateUser(context.Context, *CreateUserRequest, *CreateUserResponse) error
 	//  获取用户信息
@@ -134,6 +148,7 @@ type AccountHandler interface {
 func RegisterAccountHandler(s server.Server, hdlr AccountHandler, opts ...server.HandlerOption) error {
 	type account interface {
 		SignUp(ctx context.Context, in *SignUpRequest, out *SignUpResponse) error
+		SignIn(ctx context.Context, in *SignInRequest, out *SignInResponse) error
 		CreateUser(ctx context.Context, in *CreateUserRequest, out *CreateUserResponse) error
 		UserInfo(ctx context.Context, in *UserInfoRequest, out *UserInfoResponse) error
 		RegistrationCheck(ctx context.Context, in *RegistrationCheckRequest, out *RegistrationCheckResponse) error
@@ -152,6 +167,10 @@ type accountHandler struct {
 
 func (h *accountHandler) SignUp(ctx context.Context, in *SignUpRequest, out *SignUpResponse) error {
 	return h.AccountHandler.SignUp(ctx, in, out)
+}
+
+func (h *accountHandler) SignIn(ctx context.Context, in *SignInRequest, out *SignInResponse) error {
+	return h.AccountHandler.SignIn(ctx, in, out)
 }
 
 func (h *accountHandler) CreateUser(ctx context.Context, in *CreateUserRequest, out *CreateUserResponse) error {
