@@ -22,6 +22,8 @@ message SignUpRequest{
     string mail =3;
     string phone = 4;
     int32  gender = 5;
+    string captcha_id = 6;
+    string captcha_solution = 7;
 }
 
 message SignUpResponse{
