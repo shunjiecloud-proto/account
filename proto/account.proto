@@ -21,11 +21,12 @@ service Account {
 message SignUpRequest{
     string name = 1;     
     string password = 2; // 原始密码sha1后，使用公钥加密，再stdbase64。
-    string mail =3;
-    string phone = 4;
-    int32  gender = 5;
-    string captcha_id = 6;
-    string captcha_solution = 7;
+    string crypto_id = 3; //  加密密码的密钥对id
+    string mail = 4;
+    string phone = 5;
+    int32  gender = 6;
+    string captcha_id = 7;
+    string captcha_solution = 8;
 }
 
 message SignUpResponse{
@@ -41,6 +42,9 @@ message SignUpResponse{
 message SignInRequest {
     string account = 1;
     string password = 2; // 原始密码sha1后，使用公钥加密，再stdbase64。
+    string crypto_id = 3; //  加密密码的密钥对id
+    string captcha_id = 4;
+    string captcha_solution = 5;
 }
 
 message SignInResponse{
